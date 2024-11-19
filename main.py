@@ -1,11 +1,38 @@
 CHOSEN_ROLE = ""
 
 def crud_user(op, data):
-    match op:
-        case "create":
-            with open("users.json", 'w') as f:
-                f.write()
-    
+    if CHOSEN_ROLE == "Administrator":
+        match op:
+            case "create":
+                with open("users.txt", 'a') as f:
+                    f.write(data+"\n")
+                    f.close()
+            case "get all":
+                with open("users.txt", 'r') as f:
+                    users = f.read()
+                    f.close()
+                    return users
+            case "get with id":
+                with open("users.txt", 'r') as f:
+                    users = f.read().split(" ")
+                    f.close()
+                    return [user for user in users if user.split(" ")[0] == data] 
+            case "update":
+                with open("users.txt", 'w+r') as f:
+                    users = f.read().split(" ")
+                    uid_to_update = [i for (user, i) in enumerate(users) if user.split(" ")[0] == data][0]
+                    users[uid_to_update] = data
+                    f.write(user for user in users if user.split(" ")[0])
+                    f.close()
+            case "delete":
+                with open("users.txt", 'w+r') as f:
+                    users = f.read().split(" ")
+                    uid_to_update = [i for (user, i) in enumerate(users) if user.split(" ")[0] == data][0]
+                    users.remove(users[uid_to_update])
+                    f.write(user for user in users if user.split(" ")[0])
+                    f.close()
+            case _:
+                pass
 
 def run():
     exit = False
